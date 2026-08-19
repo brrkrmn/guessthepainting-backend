@@ -7,7 +7,7 @@ paintingsRouter.get('/last-id', async (request, response) => {
   const activePaintings = await Painting.find({ isActive: true })
 
   if (activePaintings.length === 0) {
-    response.status(404).json({ error: 'No active painting found' })
+    return response.status(404).json({ error: 'No active painting found' })
   }
 
   const lastActivePaintingId = activePaintings.sort((a, b) => b.id - a.id)[0].id
@@ -19,10 +19,10 @@ paintingsRouter.get('/:id', async (request, response) => {
   const painting = await Painting.findById(request.params.id)
 
   if (!painting || painting.isActive === false) {
-    response.status(404).json({ error: 'No painting found' })
-  } else {
-    response.status(200).json(painting)
+    return response.status(404).json({ error: 'No painting found' })
   }
+
+  response.status(200).json(painting)
 })
 
 paintingsRouter.post('/', basicAuth, async (request, response) => {

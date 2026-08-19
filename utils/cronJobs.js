@@ -1,7 +1,11 @@
 const cron = require('node-cron');
 const Painting = require('../models/painting');
+const { connectToDatabase } = require('./db');
 
 const activatePainting = async () => {
+  // Queries no longer buffer, so the connection has to be up first.
+  await connectToDatabase()
+
   let paintingToUpdate
   const activePaintings = await Painting.find({ isActive: true })
 
